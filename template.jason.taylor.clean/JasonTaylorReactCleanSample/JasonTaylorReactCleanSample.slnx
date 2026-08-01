@@ -1,0 +1,15 @@
+<Solution>
+  <Project Path="JasonTaylorReactCleanSample/src/AppHost/AppHost.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/src/Application/Application.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/src/Domain/Domain.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/src/Infrastructure/Infrastructure.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/src/ServiceDefaults/ServiceDefaults.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/src/Shared/Shared.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/src/Web/Web.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/tests/Application.FunctionalTests/Application.FunctionalTests.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/tests/Application.UnitTests/Application.UnitTests.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/tests/Domain.UnitTests/Domain.UnitTests.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/tests/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/tests/TestAppHost/TestAppHost.csproj" />
+  <Project Path="JasonTaylorReactCleanSample/tests/Web.AcceptanceTests/Web.AcceptanceTests.csproj" />
+</Solution>

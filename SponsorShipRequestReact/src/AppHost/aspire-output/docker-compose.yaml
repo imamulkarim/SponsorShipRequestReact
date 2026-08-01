@@ -1,0 +1,56 @@
+services:
+  env-dashboard:
+    image: "mcr.microsoft.com/dotnet/nightly/aspire-dashboard:latest"
+    ports:
+      - "18888"
+    expose:
+      - "18889"
+      - "18890"
+    networks:
+      - "aspire"
+    restart: "always"
+  dbserver:
+    image: "mcr.microsoft.com/mssql/server:2025-RTM-ubuntu-24.04-preview"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${PASSWORD}"
+    expose:
+      - "1433"
+    volumes:
+      - type: "volume"
+        target: "/var/opt/mssql"
+        source: "techassessment.apphost-feed4158f1-dbserver-data"
+        read_only: false
+    networks:
+      - "aspire"
+  webapi:
+    image: "${WEBAPI_IMAGE}"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      HTTP_PORTS: "${WEBAPI_PORT}"
+      ConnectionStrings__TechAssessmentDb: "Server=dbserver,1433;User ID=sa;Password=${PASSWORD};TrustServerCertificate=true;Initial Catalog=TechAssessmentDb"
+      TECHASSESSMENTDB_HOST: "dbserver"
+      TECHASSESSMENTDB_PORT: "1433"
+      TECHASSESSMENTDB_USERNAME: "sa"
+      TECHASSESSMENTDB_PASSWORD: "${PASSWORD}"
+      TECHASSESSMENTDB_URI: "mssql://sa:${PASSWORD}@dbserver:1433/TechAssessmentDb"
+      TECHASSESSMENTDB_JDBCCONNECTIONSTRING: "jdbc:sqlserver://dbserver:1433;databaseName=TechAssessmentDb;trustServerCertificate=true"
+      TECHASSESSMENTDB_DATABASENAME: "TechAssessmentDb"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://env-dashboard:18889"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+      OTEL_SERVICE_NAME: "webapi"
+    ports:
+      - "${WEBAPI_PORT}"
+    depends_on:
+      dbserver:
+        condition: "service_started"
+    networks:
+      - "aspire"
+networks:
+  aspire:
+    driver: "bridge"
+volumes:
+  techassessment.apphost-feed4158f1-dbserver-data:
+    driver: "local"

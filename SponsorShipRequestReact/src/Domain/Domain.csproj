@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>TechAssessment.Domain</RootNamespace>
+    <AssemblyName>TechAssessment.Domain</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Mediator\Mediator.csproj" />
+  </ItemGroup>
+
+</Project>
