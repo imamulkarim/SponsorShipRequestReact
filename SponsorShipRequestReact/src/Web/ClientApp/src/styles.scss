@@ -126,10 +126,10 @@ html {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
+  width: 15rem;
   height: 2rem;
   padding: 0;
-  font-size: 1.25rem;
+  font-size: 1.0rem;
   font-weight: bold;
   line-height: 1;
   flex-shrink: 0;
@@ -199,20 +199,41 @@ html {
   align-items: baseline;
   gap: 0.25rem;
   margin-bottom: var(--pico-spacing);
+  
 }
 
-.todo-item {
-  display: flex;
-  align-items: baseline;
-  gap: calc(var(--pico-spacing) * 0.5);
-  padding-block: calc(var(--pico-spacing) * 0.35);
-  border-bottom: 1px solid var(--pico-muted-border-color);
+.todo-item-header {
+    display: flex;
+    align-items: baseline;
+    gap: calc(var(--pico-spacing) * 1);
+    padding-block: calc(var(--pico-spacing) * 0.75);
+    border-bottom: 1px solid var(--pico-muted-border-color);
 
-  input[type="checkbox"] {
-    margin: 0;
-    flex-shrink: 0;
-    align-self: center;
-  }
+    input[type="checkbox"] {
+        margin: 0;
+        flex-shrink: 0;
+        align-self: center;
+    }
+}
+
+    .todo-item-header div {
+        flex: 1;
+        display:inline;
+        padding: 5px;
+    }
+
+.todo-item {
+    display: flex;
+    align-items: baseline;
+    gap: calc(var(--pico-spacing) * 0.5);
+    padding-block: calc(var(--pico-spacing) * 0.35);
+    border-bottom: 1px solid var(--pico-muted-border-color);
+
+    input[type="checkbox"] {
+        margin: 0;
+        flex-shrink: 0;
+        align-self: center;
+    }
 }
 
 .todo-item-text {

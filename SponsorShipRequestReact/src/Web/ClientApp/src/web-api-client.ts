@@ -7,7 +7,7 @@
 /* eslint-disable */
 // ReSharper disable InconsistentNaming
 
-export class TodoItemsClient {
+export class AdminRequestsClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -18,11 +18,178 @@ export class TodoItemsClient {
     }
 
     /**
-     * Create a new Todo Item
-     * @return Created
+     * Get All Requests
+     * @return OK
      */
-    createTodoItem(body: CreateTodoItemCommand): Promise<number> {
-        let url_ = this.baseUrl + "/api/TodoItems";
+    getAllRequests(): Promise<AllRequestsVm> {
+        let url_ = this.baseUrl + "/api/AdminRequests";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetAllRequests(_response);
+        });
+    }
+
+    protected processGetAllRequests(response: Response): Promise<AllRequestsVm> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = AllRequestsVm.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<AllRequestsVm>(null as any);
+    }
+
+    /**
+     * Get Request Detail
+     * @return OK
+     */
+    getRequestDetail(id: number): Promise<RequestDetailVm> {
+        let url_ = this.baseUrl + "/api/AdminRequests/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetRequestDetail(_response);
+        });
+    }
+
+    protected processGetRequestDetail(response: Response): Promise<RequestDetailVm> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RequestDetailVm.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RequestDetailVm>(null as any);
+    }
+}
+
+export class FinanceApprovalsClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * Get Pending Finance Approvals
+     * @return OK
+     */
+    getPendingApprovalsFinance(): Promise<PendingApprovalsVm> {
+        let url_ = this.baseUrl + "/api/FinanceApprovals";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPendingApprovalsFinance(_response);
+        });
+    }
+
+    protected processGetPendingApprovalsFinance(response: Response): Promise<PendingApprovalsVm> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = PendingApprovalsVm.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PendingApprovalsVm>(null as any);
+    }
+
+    /**
+     * Approve Request
+     * @return No Content
+     */
+    approveRequestFinance(id: number, body: ApproveRequestCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/FinanceApprovals/{id}/approve";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -32,73 +199,15 @@ export class TodoItemsClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json"
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateTodoItem(_response);
+            return this.processApproveRequestFinance(_response);
         });
     }
 
-    protected processCreateTodoItem(response: Response): Promise<number> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 201) {
-            return response.text().then((_responseText) => {
-            let result201: any = null;
-            let resultData201 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result201 = resultData201 !== undefined ? resultData201 : null as any;
-    
-            return result201;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            return throwException("Bad Request", status, _responseText, _headers);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<number>(null as any);
-    }
-
-    /**
-     * Update a Todo Item
-     * @return No Content
-     */
-    updateTodoItem(id: number, body: UpdateTodoItemCommand): Promise<void> {
-        let url_ = this.baseUrl + "/api/TodoItems/{id}";
-        if (id === undefined || id === null)
-            throw new globalThis.Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateTodoItem(_response);
-        });
-    }
-
-    protected processUpdateTodoItem(response: Response): Promise<void> {
+    protected processApproveRequestFinance(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -126,60 +235,11 @@ export class TodoItemsClient {
     }
 
     /**
-     * Delete a Todo Item
+     * Reject Request
      * @return No Content
      */
-    deleteTodoItem(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/api/TodoItems/{id}";
-        if (id === undefined || id === null)
-            throw new globalThis.Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "DELETE",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteTodoItem(_response);
-        });
-    }
-
-    protected processDeleteTodoItem(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 204) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status === 400) {
-            return response.text().then((_responseText) => {
-            return throwException("Bad Request", status, _responseText, _headers);
-            });
-        } else if (status === 401) {
-            return response.text().then((_responseText) => {
-            return throwException("Unauthorized", status, _responseText, _headers);
-            });
-        } else if (status === 403) {
-            return response.text().then((_responseText) => {
-            return throwException("Forbidden", status, _responseText, _headers);
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * Update Todo Item Details
-     * @return No Content
-     */
-    updateTodoItemDetail(id: number, body: UpdateTodoItemDetailCommand): Promise<void> {
-        let url_ = this.baseUrl + "/api/TodoItems/UpdateDetail/{id}";
+    rejectRequestFinance(id: number, body: RejectRequestCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/FinanceApprovals/{id}/reject";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -189,18 +249,18 @@ export class TodoItemsClient {
 
         let options_: RequestInit = {
             body: content_,
-            method: "PATCH",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateTodoItemDetail(_response);
+            return this.processRejectRequestFinance(_response);
         });
     }
 
-    protected processUpdateTodoItemDetail(response: Response): Promise<void> {
+    protected processRejectRequestFinance(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -228,7 +288,7 @@ export class TodoItemsClient {
     }
 }
 
-export class TodoListsClient {
+export class ManagerApprovalsClient {
     private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -239,11 +299,11 @@ export class TodoListsClient {
     }
 
     /**
-     * Get all Todo Lists
+     * Get Pending Manager Approvals
      * @return OK
      */
-    getTodoLists(): Promise<TodosVm> {
-        let url_ = this.baseUrl + "/api/TodoLists";
+    getPendingApprovals(): Promise<PendingApprovalsVm> {
+        let url_ = this.baseUrl + "/api/ManagerApprovals";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -254,18 +314,18 @@ export class TodoListsClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processGetTodoLists(_response);
+            return this.processGetPendingApprovals(_response);
         });
     }
 
-    protected processGetTodoLists(response: Response): Promise<TodosVm> {
+    protected processGetPendingApprovals(response: Response): Promise<PendingApprovalsVm> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = TodosVm.fromJS(resultData200);
+            result200 = PendingApprovalsVm.fromJS(resultData200);
             return result200;
             });
         } else if (status === 400) {
@@ -285,15 +345,132 @@ export class TodoListsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<TodosVm>(null as any);
+        return Promise.resolve<PendingApprovalsVm>(null as any);
     }
 
     /**
-     * Create a new Todo List
+     * Approve Request
+     * @return No Content
+     */
+    approveRequest(id: number, body: ApproveRequestCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/ManagerApprovals/{id}/approve";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processApproveRequest(_response);
+        });
+    }
+
+    protected processApproveRequest(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * Reject Request
+     * @return No Content
+     */
+    rejectRequest(id: number, body: RejectRequestCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/ManagerApprovals/{id}/reject";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRejectRequest(_response);
+        });
+    }
+
+    protected processRejectRequest(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+}
+
+export class SponsorshipRequestsClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * Create Sponsorship Request
      * @return Created
      */
-    createTodoList(body: CreateTodoListCommand): Promise<number> {
-        let url_ = this.baseUrl + "/api/TodoLists";
+    createRequest(body: CreateSponsorshipRequestCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/SponsorshipRequests";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -308,11 +485,11 @@ export class TodoListsClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreateTodoList(_response);
+            return this.processCreateRequest(_response);
         });
     }
 
-    protected processCreateTodoList(response: Response): Promise<number> {
+    protected processCreateRequest(response: Response): Promise<number> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 201) {
@@ -344,11 +521,114 @@ export class TodoListsClient {
     }
 
     /**
-     * Update a Todo List
+     * Get My Sponsorship Requests
+     * @return OK
+     */
+    getMyRequests(): Promise<MyRequestsVm> {
+        let url_ = this.baseUrl + "/api/SponsorshipRequests";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetMyRequests(_response);
+        });
+    }
+
+    protected processGetMyRequests(response: Response): Promise<MyRequestsVm> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MyRequestsVm.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<MyRequestsVm>(null as any);
+    }
+
+    /**
+     * Get Request Detail
+     * @return OK
+     */
+    getMyRequestsDetail(id: number): Promise<RequestDetailVm> {
+        let url_ = this.baseUrl + "/api/SponsorshipRequests/{id}";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetMyRequestsDetail(_response);
+        });
+    }
+
+    protected processGetMyRequestsDetail(response: Response): Promise<RequestDetailVm> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RequestDetailVm.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RequestDetailVm>(null as any);
+    }
+
+    /**
+     * Update Sponsorship Request
      * @return No Content
      */
-    updateTodoList(id: number, body: UpdateTodoListCommand): Promise<void> {
-        let url_ = this.baseUrl + "/api/TodoLists/{id}";
+    updateRequest(id: number, body: UpdateSponsorshipRequestCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/SponsorshipRequests/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -365,11 +645,11 @@ export class TodoListsClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdateTodoList(_response);
+            return this.processUpdateRequest(_response);
         });
     }
 
-    protected processUpdateTodoList(response: Response): Promise<void> {
+    protected processUpdateRequest(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -397,28 +677,28 @@ export class TodoListsClient {
     }
 
     /**
-     * Delete a Todo List
+     * Submit Sponsorship Request
      * @return No Content
      */
-    deleteTodoList(id: number): Promise<void> {
-        let url_ = this.baseUrl + "/api/TodoLists/{id}";
+    submitRequest(id: number): Promise<void> {
+        let url_ = this.baseUrl + "/api/SponsorshipRequests/{id}/submit";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
-            method: "DELETE",
+            method: "POST",
             headers: {
             }
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteTodoList(_response);
+            return this.processSubmitRequest(_response);
         });
     }
 
-    protected processDeleteTodoList(response: Response): Promise<void> {
+    protected processSubmitRequest(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -443,6 +723,120 @@ export class TodoListsClient {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * Cancel Sponsorship Request
+     * @return No Content
+     */
+    cancelRequest(id: number, body: CancelRequestCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/SponsorshipRequests/{id}/cancel";
+        if (id === undefined || id === null)
+            throw new globalThis.Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCancelRequest(_response);
+        });
+    }
+
+    protected processCancelRequest(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+}
+
+export class SponsorshipTypesClient {
+    private http: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> };
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
+        this.http = http ? http : window as any;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * Get Sponsorship Types
+     * @return OK
+     */
+    getTypes(): Promise<SponsorshipTypesVm> {
+        let url_ = this.baseUrl + "/api/SponsorshipTypes";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetTypes(_response);
+        });
+    }
+
+    protected processGetTypes(response: Response): Promise<SponsorshipTypesVm> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SponsorshipTypesVm.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SponsorshipTypesVm>(null as any);
     }
 }
 
@@ -966,6 +1360,56 @@ export class UsersClient {
     }
 
     /**
+     * Get current user
+     * @return OK
+     */
+    getCurrentUser(): Promise<CurrentUserResponse> {
+        let url_ = this.baseUrl + "/api/Users/current";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetCurrentUser(_response);
+        });
+    }
+
+    protected processGetCurrentUser(response: Response): Promise<CurrentUserResponse> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CurrentUserResponse.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 400) {
+            return response.text().then((_responseText) => {
+            return throwException("Bad Request", status, _responseText, _headers);
+            });
+        } else if (status === 401) {
+            return response.text().then((_responseText) => {
+            return throwException("Unauthorized", status, _responseText, _headers);
+            });
+        } else if (status === 403) {
+            return response.text().then((_responseText) => {
+            return throwException("Forbidden", status, _responseText, _headers);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CurrentUserResponse>(null as any);
+    }
+
+    /**
      * Log out
      * @return OK
      */
@@ -1144,13 +1588,12 @@ export interface IAccessTokenResponse {
     [key: string]: any;
 }
 
-export class ColourDto implements IColourDto {
-    code?: string;
-    name?: string;
+export class AllRequestsVm implements IAllRequestsVm {
+    requests?: AllSponsorshipRequestDto[];
 
     [key: string]: any;
 
-    constructor(data?: IColourDto) {
+    constructor(data?: IAllRequestsVm) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1165,14 +1608,17 @@ export class ColourDto implements IColourDto {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.code = _data["code"];
-            this.name = _data["name"];
+            if (Array.isArray(_data["requests"])) {
+                this.requests = [] as any;
+                for (let item of _data["requests"])
+                    this.requests!.push(AllSponsorshipRequestDto.fromJS(item));
+            }
         }
     }
 
-    static fromJS(data: any): ColourDto {
+    static fromJS(data: any): AllRequestsVm {
         data = typeof data === 'object' ? data : {};
-        let result = new ColourDto();
+        let result = new AllRequestsVm();
         result.init(data);
         return result;
     }
@@ -1183,26 +1629,35 @@ export class ColourDto implements IColourDto {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["code"] = this.code;
-        data["name"] = this.name;
+        if (Array.isArray(this.requests)) {
+            data["requests"] = [];
+            for (let item of this.requests)
+                data["requests"].push(item ? item.toJSON() : undefined as any);
+        }
         return data;
     }
 }
 
-export interface IColourDto {
-    code?: string;
-    name?: string;
+export interface IAllRequestsVm {
+    requests?: AllSponsorshipRequestDto[];
 
     [key: string]: any;
 }
 
-export class CreateTodoItemCommand implements ICreateTodoItemCommand {
-    listId?: number;
-    title?: string | undefined;
+export class AllSponsorshipRequestDto implements IAllSponsorshipRequestDto {
+    id?: number;
+    title?: string;
+    requestorName?: string;
+    department?: string;
+    sponsorshipType?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    status?: string;
+    createdAt?: Date;
 
     [key: string]: any;
 
-    constructor(data?: ICreateTodoItemCommand) {
+    constructor(data?: IAllSponsorshipRequestDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1217,14 +1672,21 @@ export class CreateTodoItemCommand implements ICreateTodoItemCommand {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            this.listId = _data["listId"];
+            this.id = _data["id"];
             this.title = _data["title"];
+            this.requestorName = _data["requestorName"];
+            this.department = _data["department"];
+            this.sponsorshipType = _data["sponsorshipType"];
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : undefined as any;
+            this.requestedAmount = _data["requestedAmount"];
+            this.status = _data["status"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : undefined as any;
         }
     }
 
-    static fromJS(data: any): CreateTodoItemCommand {
+    static fromJS(data: any): AllSponsorshipRequestDto {
         data = typeof data === 'object' ? data : {};
-        let result = new CreateTodoItemCommand();
+        let result = new AllSponsorshipRequestDto();
         result.init(data);
         return result;
     }
@@ -1235,26 +1697,223 @@ export class CreateTodoItemCommand implements ICreateTodoItemCommand {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        data["listId"] = this.listId;
+        data["id"] = this.id;
         data["title"] = this.title;
+        data["requestorName"] = this.requestorName;
+        data["department"] = this.department;
+        data["sponsorshipType"] = this.sponsorshipType;
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : undefined as any;
+        data["requestedAmount"] = this.requestedAmount;
+        data["status"] = this.status;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : undefined as any;
         return data;
     }
 }
 
-export interface ICreateTodoItemCommand {
-    listId?: number;
-    title?: string | undefined;
+export interface IAllSponsorshipRequestDto {
+    id?: number;
+    title?: string;
+    requestorName?: string;
+    department?: string;
+    sponsorshipType?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    status?: string;
+    createdAt?: Date;
 
     [key: string]: any;
 }
 
-export class CreateTodoListCommand implements ICreateTodoListCommand {
-    title?: string | undefined;
-    colour?: string | undefined;
+export class ApprovalHistoryDto implements IApprovalHistoryDto {
+    id?: number;
+    approverId?: string;
+    approverRole?: string;
+    action?: string;
+    comments?: string;
+    approvedAt?: Date;
 
     [key: string]: any;
 
-    constructor(data?: ICreateTodoListCommand) {
+    constructor(data?: IApprovalHistoryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.approverId = _data["approverId"];
+            this.approverRole = _data["approverRole"];
+            this.action = _data["action"];
+            this.comments = _data["comments"];
+            this.approvedAt = _data["approvedAt"] ? new Date(_data["approvedAt"].toString()) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): ApprovalHistoryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApprovalHistoryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["approverId"] = this.approverId;
+        data["approverRole"] = this.approverRole;
+        data["action"] = this.action;
+        data["comments"] = this.comments;
+        data["approvedAt"] = this.approvedAt ? this.approvedAt.toISOString() : undefined as any;
+        return data;
+    }
+}
+
+export interface IApprovalHistoryDto {
+    id?: number;
+    approverId?: string;
+    approverRole?: string;
+    action?: string;
+    comments?: string;
+    approvedAt?: Date;
+
+    [key: string]: any;
+}
+
+export class ApproveRequestCommand implements IApproveRequestCommand {
+    id!: number;
+    remarks!: string;
+    approverRole!: string;
+
+    [key: string]: any;
+
+    constructor(data?: IApproveRequestCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.remarks = _data["remarks"];
+            this.approverRole = _data["approverRole"];
+        }
+    }
+
+    static fromJS(data: any): ApproveRequestCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ApproveRequestCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["remarks"] = this.remarks;
+        data["approverRole"] = this.approverRole;
+        return data;
+    }
+}
+
+export interface IApproveRequestCommand {
+    id: number;
+    remarks: string;
+    approverRole: string;
+
+    [key: string]: any;
+}
+
+export class CancelRequestCommand implements ICancelRequestCommand {
+    id!: number;
+    reason!: string;
+
+    [key: string]: any;
+
+    constructor(data?: ICancelRequestCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.reason = _data["reason"];
+        }
+    }
+
+    static fromJS(data: any): CancelRequestCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CancelRequestCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["reason"] = this.reason;
+        return data;
+    }
+}
+
+export interface ICancelRequestCommand {
+    id: number;
+    reason: string;
+
+    [key: string]: any;
+}
+
+export class CreateSponsorshipRequestCommand implements ICreateSponsorshipRequestCommand {
+    title!: string;
+    department!: string;
+    sponsorshipTypeId!: number;
+    eventName!: string;
+    eventDate!: Date;
+    requestedAmount!: number;
+    purpose!: string;
+    businessBenefit?: string | undefined;
+    supportingDocumentUrl?: string | undefined;
+
+    [key: string]: any;
+
+    constructor(data?: ICreateSponsorshipRequestCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1270,13 +1929,20 @@ export class CreateTodoListCommand implements ICreateTodoListCommand {
                     this[property] = _data[property];
             }
             this.title = _data["title"];
-            this.colour = _data["colour"];
+            this.department = _data["department"];
+            this.sponsorshipTypeId = _data["sponsorshipTypeId"];
+            this.eventName = _data["eventName"];
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : undefined as any;
+            this.requestedAmount = _data["requestedAmount"];
+            this.purpose = _data["purpose"];
+            this.businessBenefit = _data["businessBenefit"];
+            this.supportingDocumentUrl = _data["supportingDocumentUrl"];
         }
     }
 
-    static fromJS(data: any): CreateTodoListCommand {
+    static fromJS(data: any): CreateSponsorshipRequestCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new CreateTodoListCommand();
+        let result = new CreateSponsorshipRequestCommand();
         result.init(data);
         return result;
     }
@@ -1288,14 +1954,92 @@ export class CreateTodoListCommand implements ICreateTodoListCommand {
                 data[property] = this[property];
         }
         data["title"] = this.title;
-        data["colour"] = this.colour;
+        data["department"] = this.department;
+        data["sponsorshipTypeId"] = this.sponsorshipTypeId;
+        data["eventName"] = this.eventName;
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : undefined as any;
+        data["requestedAmount"] = this.requestedAmount;
+        data["purpose"] = this.purpose;
+        data["businessBenefit"] = this.businessBenefit;
+        data["supportingDocumentUrl"] = this.supportingDocumentUrl;
         return data;
     }
 }
 
-export interface ICreateTodoListCommand {
-    title?: string | undefined;
-    colour?: string | undefined;
+export interface ICreateSponsorshipRequestCommand {
+    title: string;
+    department: string;
+    sponsorshipTypeId: number;
+    eventName: string;
+    eventDate: Date;
+    requestedAmount: number;
+    purpose: string;
+    businessBenefit?: string | undefined;
+    supportingDocumentUrl?: string | undefined;
+
+    [key: string]: any;
+}
+
+export class CurrentUserResponse implements ICurrentUserResponse {
+    userId?: string | undefined;
+    email?: string | undefined;
+    roles?: string[];
+
+    [key: string]: any;
+
+    constructor(data?: ICurrentUserResponse) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.userId = _data["userId"];
+            this.email = _data["email"];
+            if (Array.isArray(_data["roles"])) {
+                this.roles = [] as any;
+                for (let item of _data["roles"])
+                    this.roles!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): CurrentUserResponse {
+        data = typeof data === 'object' ? data : {};
+        let result = new CurrentUserResponse();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["userId"] = this.userId;
+        data["email"] = this.email;
+        if (Array.isArray(this.roles)) {
+            data["roles"] = [];
+            for (let item of this.roles)
+                data["roles"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface ICurrentUserResponse {
+    userId?: string | undefined;
+    email?: string | undefined;
+    roles?: string[];
 
     [key: string]: any;
 }
@@ -1596,13 +2340,76 @@ export interface ILoginRequest {
     [key: string]: any;
 }
 
-export class LookupDto implements ILookupDto {
-    id?: number;
-    title?: string | undefined;
+export class MyRequestsVm implements IMyRequestsVm {
+    requests?: SponsorshipRequestDto[];
 
     [key: string]: any;
 
-    constructor(data?: ILookupDto) {
+    constructor(data?: IMyRequestsVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["requests"])) {
+                this.requests = [] as any;
+                for (let item of _data["requests"])
+                    this.requests!.push(SponsorshipRequestDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): MyRequestsVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new MyRequestsVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.requests)) {
+            data["requests"] = [];
+            for (let item of this.requests)
+                data["requests"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IMyRequestsVm {
+    requests?: SponsorshipRequestDto[];
+
+    [key: string]: any;
+}
+
+export class PendingApprovalDto implements IPendingApprovalDto {
+    id?: number;
+    title?: string;
+    requestorName?: string;
+    department?: string;
+    eventName?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    purpose?: string;
+    submittedAt?: Date;
+
+    [key: string]: any;
+
+    constructor(data?: IPendingApprovalDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1619,12 +2426,19 @@ export class LookupDto implements ILookupDto {
             }
             this.id = _data["id"];
             this.title = _data["title"];
+            this.requestorName = _data["requestorName"];
+            this.department = _data["department"];
+            this.eventName = _data["eventName"];
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : undefined as any;
+            this.requestedAmount = _data["requestedAmount"];
+            this.purpose = _data["purpose"];
+            this.submittedAt = _data["submittedAt"] ? new Date(_data["submittedAt"].toString()) : undefined as any;
         }
     }
 
-    static fromJS(data: any): LookupDto {
+    static fromJS(data: any): PendingApprovalDto {
         data = typeof data === 'object' ? data : {};
-        let result = new LookupDto();
+        let result = new PendingApprovalDto();
         result.init(data);
         return result;
     }
@@ -1637,13 +2451,83 @@ export class LookupDto implements ILookupDto {
         }
         data["id"] = this.id;
         data["title"] = this.title;
+        data["requestorName"] = this.requestorName;
+        data["department"] = this.department;
+        data["eventName"] = this.eventName;
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : undefined as any;
+        data["requestedAmount"] = this.requestedAmount;
+        data["purpose"] = this.purpose;
+        data["submittedAt"] = this.submittedAt ? this.submittedAt.toISOString() : undefined as any;
         return data;
     }
 }
 
-export interface ILookupDto {
+export interface IPendingApprovalDto {
     id?: number;
-    title?: string | undefined;
+    title?: string;
+    requestorName?: string;
+    department?: string;
+    eventName?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    purpose?: string;
+    submittedAt?: Date;
+
+    [key: string]: any;
+}
+
+export class PendingApprovalsVm implements IPendingApprovalsVm {
+    pendingApprovals?: PendingApprovalDto[];
+
+    [key: string]: any;
+
+    constructor(data?: IPendingApprovalsVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["pendingApprovals"])) {
+                this.pendingApprovals = [] as any;
+                for (let item of _data["pendingApprovals"])
+                    this.pendingApprovals!.push(PendingApprovalDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): PendingApprovalsVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new PendingApprovalsVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.pendingApprovals)) {
+            data["pendingApprovals"] = [];
+            for (let item of this.pendingApprovals)
+                data["pendingApprovals"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IPendingApprovalsVm {
+    pendingApprovals?: PendingApprovalDto[];
 
     [key: string]: any;
 }
@@ -1744,6 +2628,182 @@ export class RegisterRequest implements IRegisterRequest {
 export interface IRegisterRequest {
     email: string;
     password: string;
+
+    [key: string]: any;
+}
+
+export class RejectRequestCommand implements IRejectRequestCommand {
+    id!: number;
+    remarks!: string;
+    approverRole!: string;
+
+    [key: string]: any;
+
+    constructor(data?: IRejectRequestCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.remarks = _data["remarks"];
+            this.approverRole = _data["approverRole"];
+        }
+    }
+
+    static fromJS(data: any): RejectRequestCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RejectRequestCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["remarks"] = this.remarks;
+        data["approverRole"] = this.approverRole;
+        return data;
+    }
+}
+
+export interface IRejectRequestCommand {
+    id: number;
+    remarks: string;
+    approverRole: string;
+
+    [key: string]: any;
+}
+
+export class RequestDetailVm implements IRequestDetailVm {
+    id?: number;
+    title?: string;
+    requestorName?: string;
+    department?: string;
+    sponsorshipType?: string;
+    eventName?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    purpose?: string;
+    businessBenefit?: string | undefined;
+    supportingDocumentUrl?: string | undefined;
+    status?: string;
+    managerApprovalRemarks?: string | undefined;
+    financeApprovalRemarks?: string | undefined;
+    createdAt?: Date;
+    lastModifiedAt?: Date | undefined;
+    approvalHistory?: ApprovalHistoryDto[];
+
+    [key: string]: any;
+
+    constructor(data?: IRequestDetailVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.requestorName = _data["requestorName"];
+            this.department = _data["department"];
+            this.sponsorshipType = _data["sponsorshipType"];
+            this.eventName = _data["eventName"];
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : undefined as any;
+            this.requestedAmount = _data["requestedAmount"];
+            this.purpose = _data["purpose"];
+            this.businessBenefit = _data["businessBenefit"];
+            this.supportingDocumentUrl = _data["supportingDocumentUrl"];
+            this.status = _data["status"];
+            this.managerApprovalRemarks = _data["managerApprovalRemarks"];
+            this.financeApprovalRemarks = _data["financeApprovalRemarks"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : undefined as any;
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : undefined as any;
+            if (Array.isArray(_data["approvalHistory"])) {
+                this.approvalHistory = [] as any;
+                for (let item of _data["approvalHistory"])
+                    this.approvalHistory!.push(ApprovalHistoryDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): RequestDetailVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestDetailVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["requestorName"] = this.requestorName;
+        data["department"] = this.department;
+        data["sponsorshipType"] = this.sponsorshipType;
+        data["eventName"] = this.eventName;
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : undefined as any;
+        data["requestedAmount"] = this.requestedAmount;
+        data["purpose"] = this.purpose;
+        data["businessBenefit"] = this.businessBenefit;
+        data["supportingDocumentUrl"] = this.supportingDocumentUrl;
+        data["status"] = this.status;
+        data["managerApprovalRemarks"] = this.managerApprovalRemarks;
+        data["financeApprovalRemarks"] = this.financeApprovalRemarks;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : undefined as any;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : undefined as any;
+        if (Array.isArray(this.approvalHistory)) {
+            data["approvalHistory"] = [];
+            for (let item of this.approvalHistory)
+                data["approvalHistory"].push(item ? item.toJSON() : undefined as any);
+        }
+        return data;
+    }
+}
+
+export interface IRequestDetailVm {
+    id?: number;
+    title?: string;
+    requestorName?: string;
+    department?: string;
+    sponsorshipType?: string;
+    eventName?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    purpose?: string;
+    businessBenefit?: string | undefined;
+    supportingDocumentUrl?: string | undefined;
+    status?: string;
+    managerApprovalRemarks?: string | undefined;
+    financeApprovalRemarks?: string | undefined;
+    createdAt?: Date;
+    lastModifiedAt?: Date | undefined;
+    approvalHistory?: ApprovalHistoryDto[];
 
     [key: string]: any;
 }
@@ -1852,83 +2912,22 @@ export interface IResetPasswordRequest {
     [key: string]: any;
 }
 
-export class TodoItemDto implements ITodoItemDto {
+export class SponsorshipRequestDto implements ISponsorshipRequestDto {
     id?: number;
-    listId?: number;
-    title?: string | undefined;
-    done?: boolean;
-    priority?: number;
-    note?: string | undefined;
+    title?: string;
+    department?: string;
+    sponsorshipType?: string;
+    eventName?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    purpose?: string;
+    status?: string;
+    createdAt?: Date;
+    lastModifiedAt?: Date | undefined;
 
     [key: string]: any;
 
-    constructor(data?: ITodoItemDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.id = _data["id"];
-            this.listId = _data["listId"];
-            this.title = _data["title"];
-            this.done = _data["done"];
-            this.priority = _data["priority"];
-            this.note = _data["note"];
-        }
-    }
-
-    static fromJS(data: any): TodoItemDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TodoItemDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["id"] = this.id;
-        data["listId"] = this.listId;
-        data["title"] = this.title;
-        data["done"] = this.done;
-        data["priority"] = this.priority;
-        data["note"] = this.note;
-        return data;
-    }
-}
-
-export interface ITodoItemDto {
-    id?: number;
-    listId?: number;
-    title?: string | undefined;
-    done?: boolean;
-    priority?: number;
-    note?: string | undefined;
-
-    [key: string]: any;
-}
-
-export class TodoListDto implements ITodoListDto {
-    id?: number;
-    title?: string | undefined;
-    colour?: string | undefined;
-    items?: TodoItemDto[];
-
-    [key: string]: any;
-
-    constructor(data?: ITodoListDto) {
+    constructor(data?: ISponsorshipRequestDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -1945,18 +2944,21 @@ export class TodoListDto implements ITodoListDto {
             }
             this.id = _data["id"];
             this.title = _data["title"];
-            this.colour = _data["colour"];
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items!.push(TodoItemDto.fromJS(item));
-            }
+            this.department = _data["department"];
+            this.sponsorshipType = _data["sponsorshipType"];
+            this.eventName = _data["eventName"];
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : undefined as any;
+            this.requestedAmount = _data["requestedAmount"];
+            this.purpose = _data["purpose"];
+            this.status = _data["status"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : undefined as any;
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : undefined as any;
         }
     }
 
-    static fromJS(data: any): TodoListDto {
+    static fromJS(data: any): SponsorshipRequestDto {
         data = typeof data === 'object' ? data : {};
-        let result = new TodoListDto();
+        let result = new SponsorshipRequestDto();
         result.init(data);
         return result;
     }
@@ -1969,33 +2971,43 @@ export class TodoListDto implements ITodoListDto {
         }
         data["id"] = this.id;
         data["title"] = this.title;
-        data["colour"] = this.colour;
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item ? item.toJSON() : undefined as any);
-        }
+        data["department"] = this.department;
+        data["sponsorshipType"] = this.sponsorshipType;
+        data["eventName"] = this.eventName;
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : undefined as any;
+        data["requestedAmount"] = this.requestedAmount;
+        data["purpose"] = this.purpose;
+        data["status"] = this.status;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : undefined as any;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : undefined as any;
         return data;
     }
 }
 
-export interface ITodoListDto {
+export interface ISponsorshipRequestDto {
     id?: number;
-    title?: string | undefined;
-    colour?: string | undefined;
-    items?: TodoItemDto[];
+    title?: string;
+    department?: string;
+    sponsorshipType?: string;
+    eventName?: string;
+    eventDate?: Date;
+    requestedAmount?: number;
+    purpose?: string;
+    status?: string;
+    createdAt?: Date;
+    lastModifiedAt?: Date | undefined;
 
     [key: string]: any;
 }
 
-export class TodosVm implements ITodosVm {
-    priorityLevels?: LookupDto[];
-    colours?: ColourDto[];
-    lists?: TodoListDto[];
+export class SponsorshipTypeDto implements ISponsorshipTypeDto {
+    id?: number;
+    name?: string;
+    description?: string;
 
     [key: string]: any;
 
-    constructor(data?: ITodosVm) {
+    constructor(data?: ISponsorshipTypeDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2010,27 +3022,15 @@ export class TodosVm implements ITodosVm {
                 if (_data.hasOwnProperty(property))
                     this[property] = _data[property];
             }
-            if (Array.isArray(_data["priorityLevels"])) {
-                this.priorityLevels = [] as any;
-                for (let item of _data["priorityLevels"])
-                    this.priorityLevels!.push(LookupDto.fromJS(item));
-            }
-            if (Array.isArray(_data["colours"])) {
-                this.colours = [] as any;
-                for (let item of _data["colours"])
-                    this.colours!.push(ColourDto.fromJS(item));
-            }
-            if (Array.isArray(_data["lists"])) {
-                this.lists = [] as any;
-                for (let item of _data["lists"])
-                    this.lists!.push(TodoListDto.fromJS(item));
-            }
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.description = _data["description"];
         }
     }
 
-    static fromJS(data: any): TodosVm {
+    static fromJS(data: any): SponsorshipTypeDto {
         data = typeof data === 'object' ? data : {};
-        let result = new TodosVm();
+        let result = new SponsorshipTypeDto();
         result.init(data);
         return result;
     }
@@ -2041,29 +3041,73 @@ export class TodosVm implements ITodosVm {
             if (this.hasOwnProperty(property))
                 data[property] = this[property];
         }
-        if (Array.isArray(this.priorityLevels)) {
-            data["priorityLevels"] = [];
-            for (let item of this.priorityLevels)
-                data["priorityLevels"].push(item ? item.toJSON() : undefined as any);
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface ISponsorshipTypeDto {
+    id?: number;
+    name?: string;
+    description?: string;
+
+    [key: string]: any;
+}
+
+export class SponsorshipTypesVm implements ISponsorshipTypesVm {
+    sponsorshipTypes?: SponsorshipTypeDto[];
+
+    [key: string]: any;
+
+    constructor(data?: ISponsorshipTypesVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
         }
-        if (Array.isArray(this.colours)) {
-            data["colours"] = [];
-            for (let item of this.colours)
-                data["colours"].push(item ? item.toJSON() : undefined as any);
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            if (Array.isArray(_data["sponsorshipTypes"])) {
+                this.sponsorshipTypes = [] as any;
+                for (let item of _data["sponsorshipTypes"])
+                    this.sponsorshipTypes!.push(SponsorshipTypeDto.fromJS(item));
+            }
         }
-        if (Array.isArray(this.lists)) {
-            data["lists"] = [];
-            for (let item of this.lists)
-                data["lists"].push(item ? item.toJSON() : undefined as any);
+    }
+
+    static fromJS(data: any): SponsorshipTypesVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new SponsorshipTypesVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        if (Array.isArray(this.sponsorshipTypes)) {
+            data["sponsorshipTypes"] = [];
+            for (let item of this.sponsorshipTypes)
+                data["sponsorshipTypes"].push(item ? item.toJSON() : undefined as any);
         }
         return data;
     }
 }
 
-export interface ITodosVm {
-    priorityLevels?: LookupDto[];
-    colours?: ColourDto[];
-    lists?: TodoListDto[];
+export interface ISponsorshipTypesVm {
+    sponsorshipTypes?: SponsorshipTypeDto[];
 
     [key: string]: any;
 }
@@ -2204,14 +3248,21 @@ export interface ITwoFactorResponse {
     [key: string]: any;
 }
 
-export class UpdateTodoItemCommand implements IUpdateTodoItemCommand {
-    id?: number;
-    title?: string | undefined;
-    done?: boolean;
+export class UpdateSponsorshipRequestCommand implements IUpdateSponsorshipRequestCommand {
+    id!: number;
+    title!: string;
+    department!: string;
+    sponsorshipTypeId!: number;
+    eventName!: string;
+    eventDate!: Date;
+    requestedAmount!: number;
+    purpose!: string;
+    businessBenefit?: string | undefined;
+    supportingDocumentUrl?: string | undefined;
 
     [key: string]: any;
 
-    constructor(data?: IUpdateTodoItemCommand) {
+    constructor(data?: IUpdateSponsorshipRequestCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -2228,13 +3279,20 @@ export class UpdateTodoItemCommand implements IUpdateTodoItemCommand {
             }
             this.id = _data["id"];
             this.title = _data["title"];
-            this.done = _data["done"];
+            this.department = _data["department"];
+            this.sponsorshipTypeId = _data["sponsorshipTypeId"];
+            this.eventName = _data["eventName"];
+            this.eventDate = _data["eventDate"] ? new Date(_data["eventDate"].toString()) : undefined as any;
+            this.requestedAmount = _data["requestedAmount"];
+            this.purpose = _data["purpose"];
+            this.businessBenefit = _data["businessBenefit"];
+            this.supportingDocumentUrl = _data["supportingDocumentUrl"];
         }
     }
 
-    static fromJS(data: any): UpdateTodoItemCommand {
+    static fromJS(data: any): UpdateSponsorshipRequestCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new UpdateTodoItemCommand();
+        let result = new UpdateSponsorshipRequestCommand();
         result.init(data);
         return result;
     }
@@ -2247,131 +3305,29 @@ export class UpdateTodoItemCommand implements IUpdateTodoItemCommand {
         }
         data["id"] = this.id;
         data["title"] = this.title;
-        data["done"] = this.done;
+        data["department"] = this.department;
+        data["sponsorshipTypeId"] = this.sponsorshipTypeId;
+        data["eventName"] = this.eventName;
+        data["eventDate"] = this.eventDate ? this.eventDate.toISOString() : undefined as any;
+        data["requestedAmount"] = this.requestedAmount;
+        data["purpose"] = this.purpose;
+        data["businessBenefit"] = this.businessBenefit;
+        data["supportingDocumentUrl"] = this.supportingDocumentUrl;
         return data;
     }
 }
 
-export interface IUpdateTodoItemCommand {
-    id?: number;
-    title?: string | undefined;
-    done?: boolean;
-
-    [key: string]: any;
-}
-
-export class UpdateTodoItemDetailCommand implements IUpdateTodoItemDetailCommand {
-    id?: number;
-    listId?: number;
-    priority?: number;
-    note?: string | undefined;
-
-    [key: string]: any;
-
-    constructor(data?: IUpdateTodoItemDetailCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.id = _data["id"];
-            this.listId = _data["listId"];
-            this.priority = _data["priority"];
-            this.note = _data["note"];
-        }
-    }
-
-    static fromJS(data: any): UpdateTodoItemDetailCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateTodoItemDetailCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["id"] = this.id;
-        data["listId"] = this.listId;
-        data["priority"] = this.priority;
-        data["note"] = this.note;
-        return data;
-    }
-}
-
-export interface IUpdateTodoItemDetailCommand {
-    id?: number;
-    listId?: number;
-    priority?: number;
-    note?: string | undefined;
-
-    [key: string]: any;
-}
-
-export class UpdateTodoListCommand implements IUpdateTodoListCommand {
-    id?: number;
-    title?: string | undefined;
-    colour?: string | undefined;
-
-    [key: string]: any;
-
-    constructor(data?: IUpdateTodoListCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (this as any)[property] = (data as any)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
-            }
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.colour = _data["colour"];
-        }
-    }
-
-    static fromJS(data: any): UpdateTodoListCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateTodoListCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["colour"] = this.colour;
-        return data;
-    }
-}
-
-export interface IUpdateTodoListCommand {
-    id?: number;
-    title?: string | undefined;
-    colour?: string | undefined;
+export interface IUpdateSponsorshipRequestCommand {
+    id: number;
+    title: string;
+    department: string;
+    sponsorshipTypeId: number;
+    eventName: string;
+    eventDate: Date;
+    requestedAmount: number;
+    purpose: string;
+    businessBenefit?: string | undefined;
+    supportingDocumentUrl?: string | undefined;
 
     [key: string]: any;
 }

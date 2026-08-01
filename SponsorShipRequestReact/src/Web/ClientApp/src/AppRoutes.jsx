@@ -1,10 +1,11 @@
 import { Counter } from "./components/Counter";
 import { Weather } from "./components/Weather";
-import { Tasks } from "./components/Todo";
+// import { Tasks } from "./components/Todo";
 import { Home } from "./components/Home";
 import { LoginPage } from "./components/api-authorization/LoginPage";
 import { RegisterPage } from "./components/api-authorization/RegisterPage";
 import { ProtectedRoute } from "./components/api-authorization/ProtectedRoute";
+import { Sponsorship } from './components/Sponsorship';
 
 const AppRoutes = [
   {
@@ -19,9 +20,13 @@ const AppRoutes = [
     path: '/weather',
     element: <ProtectedRoute><Weather /></ProtectedRoute>
   },
+  // {
+  //   path: '/todo',
+  //   element: <ProtectedRoute><Tasks /></ProtectedRoute>
+    // },
   {
-    path: '/todo',
-    element: <ProtectedRoute><Tasks /></ProtectedRoute>
+    path: '/sponsorship',
+    element: <ProtectedRoute><Sponsorship /></ProtectedRoute>
   },
   {
     path: '/login',
