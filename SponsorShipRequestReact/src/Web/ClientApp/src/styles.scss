@@ -332,6 +332,16 @@ dialog article footer {
   gap: calc(var(--pico-spacing) * 0.5);
 }
 
+dialog form {
+    margin-top: 0px;
+    top:0px;
+}
+
+dialog article {
+    min-width: 500px; 
+    margin-top: 240px;
+}
+
 // ── Button variants (not compiled in classless mode — defined manually) ───────
 button.secondary,
 [type="submit"].secondary,
@@ -365,4 +375,38 @@ button.danger,
 
 .error {
   color: var(--pico-del-color);
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.header-cell {
+    width: 210px; /* Fixed width for the header column */
+    font-weight: bold;
+}
+
+.header-cell::after {
+    content: " : "; /* Adds the vertical pipe on desktop */
+}
+
+.desc-cell {
+    flex-grow: 1; /* Description takes up all remaining space */
+}
+
+/* --- Mobile/Small Screens --- */
+@media (max-width: 600px) {
+    .flex-row {
+        flex-direction: column; /* Stacks header above description */
+    }
+
+    .header-cell {
+        width: 100%; /* Allows header to take full width */
+    }
+
+        .header-cell::after {
+            content: ":"; /* Changes the pipe (|) to a colon (:) on mobile */
+        }
 }

@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from './api-authorization/AuthContext';
+import { useAuth, SystemRoles } from './api-authorization/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
 
 function AuthLinks() {
-  const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout, userRoles, userEmail } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async (e) => {
@@ -13,7 +13,18 @@ function AuthLinks() {
   };
 
   if (isAuthenticated) {
-    return <li><a href="#" onClick={handleLogout}>Log out</a></li>;
+      return (
+          <>
+              <li>
+                  Hello {userEmail} |{" "}
+                  {userRoles &&
+                      userRoles.map((item, i) => (
+                          <span key={i}>{item}</span>
+                      ))}
+              </li>
+              <li><a href="#" onClick={handleLogout}>Log out</a></li>
+          </>
+      );
   }
   return (
     <>
@@ -24,6 +35,9 @@ function AuthLinks() {
 }
 
 export function NavMenu() {
+
+  const {  userRoles } = useAuth();
+
   return (
     <header>
       <nav>
@@ -35,6 +49,12 @@ export function NavMenu() {
             <li><Link to="/counter">Counter</Link></li>
             <li><Link to="/weather">Weather</Link></li>
             <li><Link to="/sponsorship">Sponsorship</Link></li>
+            { userRoles?.includes(SystemRoles.Manager) && (
+                <li><Link to="/sponsorship-manager-approval">Manager Approval</Link></li>
+            )}
+            {userRoles?.includes(SystemRoles.FinanceAdmin) && (
+                <li><Link to="/sponsorship-finance-approval">Finance Approval</Link></li>
+            )}
         </ul>
         <ul>
           <AuthLinks />

@@ -5,20 +5,60 @@ const AuthContext = createContext(null);
 
 const client = new UsersClient();
 
+export const SystemRoles = Object.freeze({
+    Administrator: "Administrator",
+    Manager: "Manager",
+    FinanceAdmin: "FinanceAdmin",
+    Requestor: "Requestor",
+    SystemAdmin: "SystemAdmin",
+});
+
 export function AuthProvider({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [userRoles, setUserRoles] = useState([]);
+    const [userEmail, setUserEmail] = useState(null);
 
   useEffect(() => {
     client.infoGET()
-      .then(() => setIsAuthenticated(true))
+        .then((result) => {
+            //console.log('User info:', result);
+            setUserEmail(result.email);
+            setIsAuthenticated(true);
+        })
       .catch(() => setIsAuthenticated(false))
-      .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false));
+
+      client.getCurrentUser()
+          .then((result) => {
+              //console.log('User info:', result);
+              setUserRoles(result.roles);
+              //console.log(userRoles);
+          })
+          .catch(() => setUserRoles([]));
+
   }, []);
+
+    useEffect(() => {
+
+        client.getCurrentUser()
+            .then((result) => {
+                //console.log('User info:', result);
+                setUserEmail(result.email);
+                setUserRoles(result.roles);
+                //console.log(userRoles);
+            })
+            .catch(() => setUserRoles([]));
+
+    }, [isAuthenticated]);
+
 
   const login = (email, password) =>
     client.login(true, undefined, new LoginRequest({ email, password }))
-      .then(() => setIsAuthenticated(true));
+      .then((result) => {
+        console.log('Login result:', result);
+        setIsAuthenticated(true);
+      });
 
   const register = (email, password) =>
     client.register(new RegisterRequest({ email, password }));
@@ -28,7 +68,7 @@ export function AuthProvider({ children }) {
       .then(() => setIsAuthenticated(false));
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, register, logout }}>
+      <AuthContext.Provider value={{ isAuthenticated, isLoading, login, register, logout, userRoles, userEmail }}>
       {children}
     </AuthContext.Provider>
   );
