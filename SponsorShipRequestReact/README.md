@@ -1,6 +1,6 @@
 ﻿# Tech Assessment - Sponsorship Management System
 
-A comprehensive sponsorship request management system built with .NET 10 (Clean Architecture) and Angular, featuring role-based approvals workflow for managers and finance administrators.
+A comprehensive sponsorship request management system built with .NET 10 (Clean Architecture) and React, featuring role-based approvals workflow for managers and finance administrators.
 
 ## Table of Contents
 
@@ -43,7 +43,7 @@ The project was generated using the [Clean.Architecture.Solution.Template](https
 - **.NET Aspire** (optional) for orchestration
 
 ### Frontend
-- **Angular 18+** (TypeScript)
+- **React** (TypeScript)
 - **RxJS** for reactive programming
 - **Bootstrap/CSS** for styling
 - **NSwag** for TypeScript client generation
@@ -63,15 +63,15 @@ TechAssessment/
 │   │   ├── Program.cs               # Application startup
 │   │   ├── Endpoints/               # Minimal API endpoints
 │   │   ├── Infrastructure/          # Web-specific infrastructure
-│   │   └── ClientApp/               # Angular frontend
+│   │   └── ClientApp/               # React frontend
 │   │       ├── src/
 │   │       │   ├── app/
 │   │       │   │   ├── models/      # TypeScript models
-│   │       │   │   ├── services/    # Angular services
+│   │       │   │   ├── services/    # React services
 │   │       │   │   ├── sponsorship/ # Feature modules
 │   │       │   │   └── web-api-client.ts  # Generated client
 │   │       │   └── main.ts
-│   │       ├── angular.json
+│   │       ├── .json
 │   │       ├── package.json
 │   │       └── nswag.json          # API client generation config
 │   ├── Application/                 # Business logic (CQRS)
@@ -106,7 +106,7 @@ Before starting, ensure you have the following installed:
    - Verify installation: `psql --version`
    - Ensure PostgreSQL service is running
 
-3. **Node.js & npm** (for Angular development)
+3. **Node.js & npm** (for React development)
    - Download from: https://nodejs.org/
    - Verify installation: `node --version` and `npm --version`
 
@@ -185,7 +185,7 @@ This will:
 - Set up ASP.NET Identity tables
 - Initialize test user accounts
 
-### Step 4: Angular Frontend Setup
+### Step 4: React Frontend Setup
 
 ```bash
 cd src/Web/ClientApp
@@ -210,7 +210,7 @@ dotnet build
 
 ## Running the Application
 
-### Option 1: Direct WebAPI + Angular (Recommended for Development)
+### Option 1: Direct WebAPI + React (Recommended for Development)
 
 This approach runs the backend and frontend separately, giving you maximum control and faster feedback during development.
 
@@ -233,12 +233,12 @@ dotnet run
 - Swagger UI: https://localhost:7081/swagger/ui
 - API Base URL: https://localhost:7081/api
 
-#### Terminal 2: Start Angular Frontend
+#### Terminal 2: Start React Frontend
 
 ```bash
 cd src/Web/ClientApp
 
-# Start Angular development server with hot reload
+# Start React development server with hot reload
 npm start
 
 # Expected output:
@@ -554,7 +554,7 @@ Authorization: Bearer <your-jwt-token>
 **Token Flow:**
 1. User logs in via identity endpoint
 2. Backend returns JWT token
-3. Angular stores token in local storage
+3. React stores token in local storage
 4. All API requests include token in Authorization header
 5. Backend validates token before processing request
 
@@ -629,7 +629,7 @@ cd src/Web
 dotnet ef database update
 ```
 
-#### 3. Angular Build Error: ERESOLVE
+#### 3. React Build Error: ERESOLVE
 
 **Error Message:**
 ```
@@ -675,7 +675,7 @@ taskkill /PID <PID> /F
 lsof -ti:7081 | xargs kill -9
 ```
 
-For Angular frontend (port 4200):
+For React frontend (port 4200):
 ```bash
 cd src/Web/ClientApp
 
@@ -788,7 +788,7 @@ npm run generate-client
 # If script doesn't exist, run nswag directly:
 nswag run nswag.json
 
-# Restart Angular
+# Restart React
 npm start
 ```
 
@@ -1016,7 +1016,7 @@ Build succeeded
 - **[.NET 10 Documentation](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10)**
 - **[ASP.NET Core Minimal APIs](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis)**
 - **[Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)**
-- **[Angular Documentation](https://angular.io/docs)**
+- ****
 - **[MediatR Documentation](https://github.com/jbogard/MediatR)**
 - **[NSwag Documentation](https://github.com/RicoSuter/NSwag)**
 - **[Clean Architecture Explained](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)**
@@ -1038,7 +1038,7 @@ For issues or questions:
 ---
 
 **Last Updated**: 2024  
-**Framework**: .NET 10, Angular 18+  
+**Framework**: .NET 10, React vite  
 **Database**: PostgreSQL 12+  
 **Status**: Production Ready
 
